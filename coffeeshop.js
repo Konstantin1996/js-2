@@ -53,22 +53,26 @@ Order.prototype.deleteFirstFromOrder = function() {
 }
 
 /**
- * Завершает заказ, делает объект неизменяемым и возвращает итоговую сумму заказа.
+ * Завершает заказ, делает объект неизменяемым и выводит в консоль итоговую сумму заказа и каллории.
  * @this {Order}
- * @return {Number} resultOrderPrice - Возвращает итоговую сумму заказа.
  * 
  */
 Order.prototype.finishOrder = function() {
 
     this.resultOrderPrice = 0;
-
+    this.resultOrderCalories = 0;
     for(var i = 0; i < this.foodArray.length; i++) {
         this.resultOrderPrice += this.foodArray[i].price;
+        this.resultOrderCalories += this.foodArray[i].calories;
     }
 
     Object.freeze(this);
-    console.log('The price of your order is: ' + this.resultOrderPrice + ' tugrickes');
-    return this.resultOrderPrice;
+    console.log('-------------------')
+    console.log('Order information:');
+    console.log('Price: ' + this.resultOrderPrice + ' tugrickes');
+    console.log('Calories: ' + this.resultOrderCalories);
+    console.log('-------------------');
+
 }
 
 /**
@@ -97,28 +101,31 @@ function Food(size, stuffing, type, weight) {
         this.weight = weight;
     }
 
-    // Цена, для объектов классов Hamburger, Salad, Drink
-    this.price = this.calculatePrice.call(this, this.size, this.stuffing, this.type, this.weight);
+    // Цена и каллории для объектов классов Hamburger, Salad, Drink
+    this.price = this.calculatePriceAndCalories.call(this, this.size, this.stuffing, this.type, this.weight)[0];
+    this.calories = this.calculatePriceAndCalories.call(this, this.size, this.stuffing, this.type, this.weight)[1];    
 }
 
 /**
 * Узнать цену Гамбургера/Салата/Напитка
 * 
 * @this {Hamburger,Drink,Salad} 
-* @return {Number} price - Цена конкретного продукта
+* @return {Array[price,calories]} Первый аргумент - цена конкретного продукта, второй - каллории
 */
-Food.prototype.calculatePrice = function() {
-    
+Food.prototype.calculatePriceAndCalories = function() {
     this.price = 0;
+    this.calories = 0;
     // Проверяем, чем является this и в зависимости от аргументов считаем цену
     if (this instanceof Hamburger) {
         switch(this.size) {
             case(Hamburger.SIZE_LARGE): {
                 this.price += 100;
+                this.calories += 40;
                 break;
             }
             case(Hamburger.SIZE_SMALL): {
                 this.price += 50;
+                this.calories += 20;
                 break;
             }
         }
@@ -126,14 +133,17 @@ Food.prototype.calculatePrice = function() {
         switch(this.stuffing) {
             case(Hamburger.STUFFING_CHEESE): {
                 this.price += 10;
+                this.calories += 20;
                 break;
             }
             case(Hamburger.STUFFING_SALAD): {
                 this.price += 20;
+                this.calories += 5;
                 break;
             }
             case(Hamburger.STUFFING_POTATO): {
                 this.price += 15;
+                this.calories += 10;
                 break;
             }
         }
@@ -145,9 +155,11 @@ Food.prototype.calculatePrice = function() {
         switch(this.type) {
             case(Salad.TYPE_RUSSIAN): {
                 this.price += (this.weight * 100)/100;
+                this.calories += (this.weight * 20)/100;
             }
             case(Salad.TYPE_CAESAR): {
                 this.price += (this.weight * 50)/100;
+                this.calories += (this.weight * 80)/100;
             }
         }
     }
@@ -156,17 +168,21 @@ Food.prototype.calculatePrice = function() {
         switch(this.type) {
             case(Drink.TYPE_COLA): {
                 this.price += 50;
+                this.calories += 40;
                 break;
             }
             case(Drink.TYPE_COFFEE): {
                 this.price += 80;
+                this.calories += 20;
                 break;
             }
         }
     }
 
-    return this.price; 
+    return [this.price,this.calories]; 
 }
+
+
 
 /**
 * Класс описывающий Гамбургер.
