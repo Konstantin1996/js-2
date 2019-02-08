@@ -1,21 +1,22 @@
 /**
- * @file Кафе быстрого питания
+ * @file Coffee shop
  * @author Konstantin
  */
 
 /**
-* Класс, объекты которого описывают отдельный заказ. 
-* 
+*
+* Class which objects desrcibe specific class
+*
 * @this {Order} 
 * @constructor
 */
 function Order() {
-    // Здесь храним объекты Hamburger, Salad, Drink
+    // Here we store Hamburger, Salad, Drink
     this.foodArray = [];
 }
 
 /**
- * Добавляет в массив foodArray экземпляр класса Food.
+ * Add into foodArray class instance Food.
  *
  * @this {Order}
  * @param  {food} - Экземпляр класса Food
@@ -32,10 +33,10 @@ Order.prototype.addToOrder = function(food) {
 }
 
 /**
- * Удаляет последнее добавленное блюдо.
+ * Delete last added dish
  * 
  * @this {Order}
- * @return {Food} - Удаленный объект
+ * @return {Food} - Deleted object
  * 
  */
 Order.prototype.deleteLastFromOrder = function() {
@@ -43,9 +44,9 @@ Order.prototype.deleteLastFromOrder = function() {
 }
 
 /**
- * Удаляет первое добавленное блюдо.
- *
- * @return {Food} - Удаленный объект
+ * Delete first added dish
+ * 
+ * @return {Food} - Deleted object
  * 
  */
 Order.prototype.deleteFirstFromOrder = function() {
@@ -53,7 +54,9 @@ Order.prototype.deleteFirstFromOrder = function() {
 }
 
 /**
- * Завершает заказ, делает объект неизменяемым и выводит в консоль итоговую сумму заказа и каллории.
+ *
+ * End the order. Make an object unchangable and displays total amount and callories.
+ * 
  * @this {Order}
  * 
  */
@@ -76,12 +79,13 @@ Order.prototype.finishOrder = function() {
 }
 
 /**
-* Класс описывающий категорию еды.
 * 
-* @param size Размер, если есть
-* @param stuffing Добавка, если есть
-* @param type Тип, если есть
-* @param weight Вес, если есть
+* Class which discribes types of food
+* 
+* @param size Size, if exist
+* @param stuffing Toppings, if exist
+* @param type Type, if exist
+* @param weight Weight, if exist
 * @this {Hamburger,Drink,Salad} 
 * @constructor
 */
@@ -101,21 +105,21 @@ function Food(size, stuffing, type, weight) {
         this.weight = weight;
     }
 
-    // Цена и каллории для объектов классов Hamburger, Salad, Drink
+    //  Price and calories of the objects Hamburger, Salad, Drink
     this.price = this.calculatePriceAndCalories.call(this, this.size, this.stuffing, this.type, this.weight)[0];
     this.calories = this.calculatePriceAndCalories.call(this, this.size, this.stuffing, this.type, this.weight)[1];    
 }
 
 /**
-* Узнать цену Гамбургера/Салата/Напитка
+* Find out the price of Hamburger/Salad/Drink
 * 
 * @this {Hamburger,Drink,Salad} 
-* @return {Array[price,calories]} Первый аргумент - цена конкретного продукта, второй - каллории
+* @return {Array[price,calories]}  The first argument is the price of a specific product, the second is calories.
 */
 Food.prototype.calculatePriceAndCalories = function() {
     this.price = 0;
     this.calories = 0;
-    // Проверяем, чем является this и в зависимости от аргументов считаем цену
+    // Check what this is and, depending on the arguments, consider the price
     if (this instanceof Hamburger) {
         switch(this.size) {
             case(Hamburger.SIZE_LARGE): {
@@ -185,41 +189,41 @@ Food.prototype.calculatePriceAndCalories = function() {
 
 
 /**
-* Класс описывающий Гамбургер.
+* Class describing Hamburger.
 * 
-* @param size Размер
-* @param stuffing Добавка
+* @param size Size
+* @param stuffing Stuff
 * @this {Hamburger} 
 * @constructor
 */
 function Hamburger(size, stuffing) {
     Food.call(this, size, stuffing);
 }
-/* Наследуем Гамбургер от класса Еды */
+/* Inherit Hamburger from Food Class */
 Hamburger.prototype = Object.create(Food.prototype);
 Hamburger.prototype.constructor = Hamburger;
 
 /**
-* Узнать размер Гамбургера
+* Find out the size of the Hamburger
 * 
 * @this {Hamburger} 
-* @return {Number} size - Размер Гамбургера
+* @return {Number} size - Size of the Hamburger
 */
 Hamburger.prototype.getSize = function() {
     return this.size;
 }
 
 /**
-* Узнать начинку Гамбургера
+* Find out the Hamburger stuffing
 * 
 * @this {Hamburger} 
-* @return {Number} stuffing - Начинка Гамбургера
+* @return {Number} stuffing - Hamburger Toppings
 */
 Hamburger.prototype.getStuffing = function() {
     return this.stuffing;
 }
 
-/* Размеры, виды начинок и добавок */
+/* Sizes, types of fillings and additives */
 Hamburger.SIZE_SMALL = 'small';
 Hamburger.SIZE_LARGE = 'large';
 Hamburger.STUFFING_CHEESE = 'cheese';
@@ -227,10 +231,10 @@ Hamburger.STUFFING_SALAD = 'salad';
 Hamburger.STUFFING_POTATO = 'potato';
 
 /**
-* Класс описывающий Салат.
+* Class describes Salad.
 * 
-* @param type Тип салата
-* @param weight Вес салата
+* @param type Type of the Salad
+* @param weight Weight of the Salad
 * @this {Salad} 
 * @constructor
 */
@@ -238,38 +242,38 @@ function Salad(type, weight) {
     Food.call(this, size = undefined, stuffing = undefined, type, weight);
 }
 
-/* Наследуем Салат от класса Еды */
+/* Inherit Salad from Food Class*/
 Salad.prototype = Object.create(Food.prototype);
 Salad.prototype.constructor = Salad;
 
 /**
-* Узнать тип Салата
+* Find out the type of the Salad
 * 
 * @this {Salad} 
-* @return {Number} type - тип Салата
+* @return {Number} type - Salad type
 */
 Salad.prototype.getType = function() {
     return this.type;
 }
 
 /**
-* Узнать вес Салата
+* Find out weight of the Salad
 * 
 * @this {Salad} 
-* @return {Number} weight - вес Салата
+* @return {Number} weight - Salad weight
 */
 Salad.prototype.getWeight = function() {
     return this.weight;
 }
-/* Типы салатов и вес */
+/* Types of salads and weight */
 Salad.TYPE_RUSSIAN = 'russian';
 Salad.TYPE_CAESAR = 'caesar';
 Salad.WEIGHT = 170;
 
 /**
-* Класс описывающий Напиток.
+* Class describing the drink.
 * 
-* @param type Тип салата
+* @param type Salad type
 * @this {Drink} 
 * @constructor
 */
@@ -277,35 +281,35 @@ function Drink(type) {
     Food.call(this, size = undefined, stuffing = undefined, type);
 }
 
-/* Наследуемся от класса Еды */ 
+/* Inherited from Food Class */ 
 Drink.prototype = Object.create(Food.prototype);
 Drink.prototype.constructor = Drink;
 
 /**
-* Узнать тип Напитка
+* Find out type of the Drink
 * 
 * @this {Drink} 
-* @return {Number} type - тип Салата
+* @return {Number} type - Salad type
 */
 Drink.prototype.getType = function() {
     return this.type;
 }
 
-/* Типы напитков */
+/* Types of the drinks */
 Drink.TYPE_COLA = 'cola';
 Drink.TYPE_COFFEE = 'coffee';
 
-// Создаем гамбургер, салат, напиток
+// Create a hamburger, salad, drink
 var h1 = new Hamburger(Hamburger.SIZE_LARGE, Hamburger.STUFFING_CHEESE);
 var s1 = new Salad(Salad.TYPE_CAESAR,Salad.WEIGHT);
 var d1 = new Drink(Drink.TYPE_COFFEE);
 
-// Создаем заказ и добавляем в него еду
+// Create an order and add food to it
 var o1 = new Order();
 o1.addToOrder(h1);
 o1.addToOrder(s1);
 o1.addToOrder(d1);
-// Завершаем заказ, больше изменять его не можем
+// We finish the order, we cannot change it anymore
 o1.finishOrder();
 
 // Другой заказ
@@ -313,10 +317,10 @@ var o2 = new Order();
 o2.addToOrder(d1);
 o2.addToOrder(h1);
 o2.addToOrder(h1);
-// Удаляем первое блюдо с заказа
+// Remove the first dish from the order
 o2.deleteFirstFromOrder();
 o2.addToOrder(h1);
 o2.finishOrder();
-// Пытаемся добавить еду после завершения заказа, но еда уже не добавляется
+// We are trying to add food after order completion, but food is no longer added.
 o2.addToOrder(s1);
 
