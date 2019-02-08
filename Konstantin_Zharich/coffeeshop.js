@@ -312,7 +312,7 @@ o1.addToOrder(d1);
 // We finish the order, we cannot change it anymore
 o1.finishOrder();
 
-// Другой заказ
+// Another order
 var o2 = new Order();
 o2.addToOrder(d1);
 o2.addToOrder(h1);
